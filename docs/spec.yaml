@@ -40,6 +40,7 @@ product_constraints:
       - read_only_entry_view_window
       - bottom_editor_status_bar
       - editor_appearance_settings
+      - word_wrap_toggle
       - word_wrap_column_guide
     deferred:
       - search
@@ -98,6 +99,7 @@ success_criteria:
     - User can view an entry in a separate read-only window.
     - User can edit a selected entry in the main editor window.
     - User can set editor font size, text color, and background color.
+    - User can enable or disable word wrap.
     - User can show or hide a faint word wrap guide.
     - User can set the word wrap column, defaulting to 88 characters.
     - Interface stays quiet and focused on writing.
@@ -141,6 +143,7 @@ features:
       - font_size
       - text_color
       - background_color
+      - word_wrap_enabled
       - wrap_guide_visible
       - wrap_guide_column
     persistence:
@@ -150,6 +153,20 @@ features:
       - Settings are opened from the Esc options window.
       - Changes apply immediately to the editor.
       - Settings persist locally across launches.
+
+  word_wrap_toggle:
+    purpose: >
+      Let the user choose whether long lines wrap visually or continue
+      horizontally while keeping the writing surface minimal.
+    default:
+      enabled: true
+    controls:
+      - enabled_toggle
+    behavior:
+      - Word wrap is enabled by default.
+      - Disabling word wrap makes long lines continue horizontally.
+      - Disabling word wrap lets the editor use the full window width.
+      - The setting persists with editor appearance settings.
 
   word_wrap_column_guide:
     purpose: >
@@ -162,9 +179,10 @@ features:
       - visible_toggle
       - character_column_input
     behavior:
-      - Textarea word wrap remains enabled.
-      - Editor width is constrained to the configured monospace character column.
-      - Guide position uses the same configured column and editor padding as the text wrap.
+      - Textarea word wrap follows the word wrap toggle setting.
+      - When word wrap is enabled, editor width is constrained to the configured monospace character column.
+      - When word wrap is disabled, editor width fills the window and long lines scroll horizontally.
+      - Guide position uses the same configured column and editor padding as the enabled text wrap.
       - Hiding the guide does not change the wrap column.
       - Guide settings persist with editor appearance settings.
 

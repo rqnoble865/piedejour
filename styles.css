@@ -47,8 +47,7 @@ button:hover {
   background: var(--hover);
 }
 
-button:focus-visible,
-textarea:focus-visible {
+button:focus-visible {
   outline: 2px solid #8da2fb;
   outline-offset: -2px;
 }
@@ -74,14 +73,7 @@ textarea:focus-visible {
 }
 
 .wrap-guide {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--editor-padding-left) + var(--wrap-column));
-  z-index: 1;
-  width: 1px;
-  background: rgba(31, 35, 40, 0.14);
-  pointer-events: none;
+  display: none;
 }
 
 .wrap-guide[hidden] {
@@ -99,12 +91,33 @@ textarea:focus-visible {
   min-height: 0;
   padding: 18px var(--editor-padding-right) 18px var(--editor-padding-left);
   border: 0;
+  outline: 0;
+  overflow-x: hidden;
   resize: none;
   color: var(--ink);
   background: transparent;
+  background-image: var(--wrap-guide-image, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
   font-family: "SF Mono", Menlo, Consolas, monospace;
   font-size: 15px;
   line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  box-shadow: none;
+}
+
+.plain-editor.no-word-wrap {
+  width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.plain-editor:focus,
+.plain-editor:focus-visible {
+  outline: 0;
+  box-shadow: none;
 }
 
 .status-bar {

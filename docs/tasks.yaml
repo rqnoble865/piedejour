@@ -203,3 +203,65 @@ tasks:
       - Ignore node_modules and packaging output.
       - Ignore logs, local runtime data, caches, OS files, and editor metadata.
       - Keep source, docs, package.json, and package-lock.json trackable.
+
+  - id: migrate_electron_42_security_fix
+    title: Migrate Electron to 42.5.0 for audit fix
+    status: completed
+    completed_on: 2026-06-28
+    files:
+      - package.json
+      - package-lock.json
+      - README.md
+      - docs/tasks.yaml
+      - docs/lessons-learned.yaml
+    notes:
+      - Upgrade Electron from 31.7.7 to 42.5.0.
+      - Remove stale npm allowScripts entry for electron@31.7.7.
+      - Update README because Electron 42 downloads its binary on first run instead of postinstall.
+      - Ran npx install-electron --no to download the Electron 42 binary.
+      - npm audit reports 0 vulnerabilities.
+      - npm run check passes.
+      - npm start launches successfully.
+
+  - id: remove_editor_work_area_outline
+    title: Remove editor working area outline around wrap column
+    status: completed
+    completed_on: 2026-06-28
+    files:
+      - styles.css
+      - docs/tasks.yaml
+    notes:
+      - Kept the word wrap marker visible.
+      - Removed textarea focus outline and shadow so no extra border appears around the working area.
+
+  - id: restore_wrap_marker_visibility
+    title: Restore word wrap marker visibility after outline cleanup
+    status: completed
+    completed_on: 2026-06-28
+    files:
+      - app.js
+      - styles.css
+      - docs/tasks.yaml
+      - docs/lessons-learned.yaml
+    notes:
+      - The marker was not reliably visible as a separate element layered over the textarea.
+      - Rendered the guide as the textarea's own background gradient.
+      - Derived the guide color from the current text color so it remains visible with custom colors.
+      - Kept the guide tied to the same configured column as the actual text wrap.
+      - Preserved the no-outline working area.
+
+  - id: add_word_wrap_toggle
+    title: Add setting to enable or disable word wrap
+    status: completed
+    completed_on: 2026-06-28
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+    notes:
+      - Added a persisted Enable word wrap checkbox to Settings.
+      - Word wrap is enabled by default.
+      - Disabling word wrap sets the textarea to no-wrap mode and uses horizontal scrolling.
+      - No-wrap mode lets the editor fill the window width.

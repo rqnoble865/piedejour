@@ -121,3 +121,27 @@ lessons:
       - Drive the editor width and guide position from the same wrap column setting.
       - Treat guide visibility as independent from wrap width.
       - Verify visual aids correspond to actual editor behavior, not just decoration.
+
+  - id: electron_upgrade_changes_install_assumptions
+    date: 2026-06-28
+    category: setup
+    mistake: Electron install guidance assumed the older postinstall binary download behavior.
+    impact: >
+      After upgrading to Electron 42, README instructions about approving
+      Electron's postinstall script would be stale and confusing.
+    prevention:
+      - Check Electron release and breaking-change notes during major upgrades.
+      - Update dependency instructions when package install behavior changes.
+      - Verify npm audit, syntax checks, and app launch after security migrations.
+
+  - id: textarea_overlays_are_unreliable
+    date: 2026-06-28
+    category: implementation
+    mistake: The wrap guide was implemented as a separate element layered over the textarea.
+    impact: >
+      Native textarea rendering made the guide unreliable after removing the
+      surrounding editor outline, so the marker could disappear.
+    prevention:
+      - Render editor visual aids inside the textarea when they must align with typed text.
+      - Drive the visual marker and text wrap width from the same CSS variables.
+      - Verify that removing decorative borders does not remove the only visible marker.

@@ -4,6 +4,7 @@ const DEFAULT_SETTINGS = {
   fontSize: 15,
   textColor: "#1f2328",
   backgroundColor: "#ffffff",
+  wordWrapEnabled: true,
   wrapGuideColumn: 88,
   wrapGuideVisible: true,
 };
@@ -30,6 +31,7 @@ const fontSizeInput = document.querySelector("#fontSizeInput");
 const fontSizeValue = document.querySelector("#fontSizeValue");
 const textColorInput = document.querySelector("#textColorInput");
 const backgroundColorInput = document.querySelector("#backgroundColorInput");
+const wordWrapEnabledInput = document.querySelector("#wordWrapEnabledInput");
 const wrapGuideColumnInput = document.querySelector("#wrapGuideColumnInput");
 const wrapGuideVisibleInput = document.querySelector("#wrapGuideVisibleInput");
 const browseDialog = document.querySelector("#browseDialog");
@@ -108,6 +110,10 @@ function normalizeSettings(candidate) {
     normalized.backgroundColor = candidate.backgroundColor;
   }
 
+  if (typeof candidate?.wordWrapEnabled === "boolean") {
+    normalized.wordWrapEnabled = candidate.wordWrapEnabled;
+  }
+
   if (Number.isFinite(candidate?.wrapGuideColumn)) {
     normalized.wrapGuideColumn = Math.min(160, Math.max(40, candidate.wrapGuideColumn));
   }
@@ -123,17 +129,34 @@ function isHexColor(value) {
   return typeof value === "string" && /^#[0-9a-fA-F]{6}$/.test(value);
 }
 
+function hexToRgba(hexColor, alpha) {
+  const value = Number.parseInt(hexColor.slice(1), 16);
+  const red = (value >> 16) & 255;
+  const green = (value >> 8) & 255;
+  const blue = value & 255;
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
 function applySettings() {
+  const wrapGuideColor = hexToRgba(settings.textColor, 0.2);
+  const wrapGuideImage = `linear-gradient(to right, transparent calc(var(--editor-padding-left) + var(--wrap-column) - 1px), ${wrapGuideColor} calc(var(--editor-padding-left) + var(--wrap-column) - 1px), ${wrapGuideColor} calc(var(--editor-padding-left) + var(--wrap-column)), transparent calc(var(--editor-padding-left) + var(--wrap-column)))`;
   entryBody.style.fontSize = `${settings.fontSize}px`;
   entryBody.style.color = settings.textColor;
   document.body.style.backgroundColor = settings.backgroundColor;
   editorWrap.style.backgroundColor = settings.backgroundColor;
   editorWrap.style.setProperty("--wrap-column", `${settings.wrapGuideColumn}ch`);
-  wrapGuide.hidden = !settings.wrapGuideVisible;
+  entryBody.wrap = settings.wordWrapEnabled ? "soft" : "off";
+  entryBody.classList.toggle("no-word-wrap", !settings.wordWrapEnabled);
+  entryBody.style.setProperty(
+    "--wrap-guide-image",
+    settings.wrapGuideVisible ? wrapGuideImage : "none",
+  );
+  wrapGuide.hidden = true;
   fontSizeInput.value = String(settings.fontSize);
   fontSizeValue.textContent = `${settings.fontSize}px`;
   textColorInput.value = settings.textColor;
   backgroundColorInput.value = settings.backgroundColor;
+  wordWrapEnabledInput.checked = settings.wordWrapEnabled;
   wrapGuideColumnInput.value = String(settings.wrapGuideColumn);
   wrapGuideVisibleInput.checked = settings.wrapGuideVisible;
 }
@@ -511,6 +534,11 @@ textColorInput.addEventListener("input", () => {
 
 backgroundColorInput.addEventListener("input", () => {
   settings.backgroundColor = backgroundColorInput.value;
+  queueSettingsSave();
+});
+
+wordWrapEnabledInput.addEventListener("change", () => {
+  settings.wordWrapEnabled = wordWrapEnabledInput.checked;
   queueSettingsSave();
 });
 

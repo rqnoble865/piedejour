@@ -43,18 +43,17 @@ From the project folder:
 npm install
 ```
 
-If npm reports that Electron has a pending install script, approve it and rebuild
-Electron:
-
-```bash
-npm approve-scripts electron
-npm rebuild electron --foreground-scripts
-```
-
 Verify Electron resolves correctly:
 
 ```bash
 node -e "console.log(require('electron'))"
+```
+
+Electron 42 downloads its desktop binary when the `electron` command is first
+run. If the first launch cannot download the binary, install it manually:
+
+```bash
+npx install-electron --no
 ```
 
 ## Run the app
