@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piedejour</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="editor-body">
+    <main class="editor-shell">
+      <div class="editor-wrap">
+        <div id="wrapGuide" class="wrap-guide" aria-hidden="true"></div>
+        <textarea id="entryBody" class="plain-editor" autofocus spellcheck="true"></textarea>
+      </div>
+      <footer class="status-bar" aria-label="Editor status">
+        <span id="statusDate"></span>
+        <span id="statusCursor">Ln 1, Col 1</span>
+        <span id="statusLines">1 line</span>
+        <span id="statusWords">0 words</span>
+        <span id="statusCharacters">0 characters</span>
+        <span id="saveStatus" aria-live="polite">Saved</span>
+      </footer>
+    </main>
+
+    <dialog id="todayDialog" class="dialog">
+      <form method="dialog" class="dialog-panel">
+        <h2>You already have an entry for today.</h2>
+        <p>Continue editing the existing entry or start a separate one for today.</p>
+        <div class="dialog-actions">
+          <button type="button" id="continueTodayButton">Continue editing</button>
+          <button type="button" id="startFreshButton">Start new entry</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="optionsDialog" class="dialog options-dialog">
+      <form method="dialog" class="dialog-panel options-panel">
+        <button type="button" id="optionNewEntryButton">New Entry</button>
+        <button type="button" id="optionBrowseButton">Browse Entries</button>
+        <button type="button" id="optionSettingsButton">Settings</button>
+      </form>
+    </dialog>
+
+    <dialog id="settingsDialog" class="dialog settings-dialog">
+      <form method="dialog" class="dialog-panel settings-panel">
+        <div class="dialog-heading">
+          <h2>Settings</h2>
+          <button type="button" id="closeSettingsButton" class="icon-button" aria-label="Close">
+            x
+          </button>
+        </div>
+
+        <label class="setting-field" for="fontSizeInput">
+          <span>Font size</span>
+          <input id="fontSizeInput" type="range" min="12" max="28" step="1" />
+          <output id="fontSizeValue"></output>
+        </label>
+
+        <label class="setting-field setting-color" for="textColorInput">
+          <span>Text color</span>
+          <input id="textColorInput" type="color" />
+        </label>
+
+        <label class="setting-field setting-color" for="backgroundColorInput">
+          <span>Background color</span>
+          <input id="backgroundColorInput" type="color" />
+        </label>
+
+        <label class="setting-field" for="wrapGuideColumnInput">
+          <span>Wrap guide</span>
+          <input id="wrapGuideColumnInput" type="number" min="40" max="160" step="1" />
+          <output>chars</output>
+        </label>
+
+        <label class="setting-check" for="wrapGuideVisibleInput">
+          <input id="wrapGuideVisibleInput" type="checkbox" />
+          <span>Show wrap guide</span>
+        </label>
+      </form>
+    </dialog>
+
+    <dialog id="browseDialog" class="dialog browse-dialog">
+      <form method="dialog" class="dialog-panel browse-panel">
+        <div class="dialog-heading">
+          <h2>Browse by Date</h2>
+          <button type="button" id="closeBrowseButton" class="icon-button" aria-label="Close">
+            x
+          </button>
+        </div>
+
+        <div class="calendar-toolbar">
+          <button type="button" id="previousMonthButton" aria-label="Previous month">&lt;</button>
+          <div id="browseMonthLabel" class="calendar-month"></div>
+          <button type="button" id="nextMonthButton" aria-label="Next month">&gt;</button>
+        </div>
+
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+        </div>
+        <div id="calendarGrid" class="calendar-grid" aria-label="Calendar"></div>
+
+        <section class="selected-date-panel" aria-label="Selected date entries">
+          <h3 id="selectedDateLabel"></h3>
+          <div id="selectedDateEntries" class="selected-date-entries"></div>
+        </section>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>

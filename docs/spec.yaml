@@ -1,0 +1,198 @@
+project:
+  name: Piedejour
+  type: local_first_desktop_journal
+  purpose: >
+    A minimal desktop journaling app for writing plain text entries that autosave
+    locally. The app supports multiple entries per day and asks how to proceed
+    when entries already exist for the current day.
+
+collaboration:
+  working_style:
+    - Discuss product direction before implementation.
+    - Challenge assumptions and clarify scope before coding.
+    - Use positive constraints to define the intended path.
+    - Keep software intentionally minimal until a need is proven.
+    - Document decisions, task state, and lessons learned in YAML.
+  implementation_gate: >
+    Do not begin coding new product features until the user explicitly approves
+    implementation.
+
+product_constraints:
+  platform: desktop_app
+  storage:
+    current: local_filesystem
+    future: sync_or_backup
+  entries:
+    same_day_entries: multiple_allowed
+    existing_today_flow:
+      - continue_editing_latest_today_entry
+      - create_second_entry_for_today
+  privacy:
+    current: no_passcode_or_encryption
+    future: only_when_requested_or_needed
+  feature_scope:
+    current:
+      - plain_text_entry
+      - autosave
+      - local_storage
+      - same_day_continue_or_new_prompt
+      - clickable_calendar_browse_by_date
+      - read_only_entry_view_window
+      - bottom_editor_status_bar
+      - editor_appearance_settings
+      - word_wrap_column_guide
+    deferred:
+      - search
+      - tags
+      - prompts
+      - mood_tracking
+      - analytics
+      - cloud_sync
+      - backup_export
+
+technical_shape:
+  app_shell: Electron
+  renderer:
+    files:
+      - index.html
+      - styles.css
+      - app.js
+  desktop_process:
+    files:
+      - main.js
+      - preload.js
+  package_file: package.json
+  secondary_windows:
+    entry_view:
+      purpose: read_only_single_entry_view
+      files:
+        - entry-view.html
+        - entry-view.js
+  data_model:
+    entry:
+      id: string
+      date: yyyy-mm-dd
+      title: string
+      body: string
+      createdAt: iso_datetime
+      updatedAt: iso_datetime
+  persistence:
+    desktop: Electron userData directory entries.json
+    settings: Electron userData directory settings.json
+    browser_fallback: localStorage key piedejour.entries
+
+success_criteria:
+  current_version:
+    - App opens as a desktop window.
+    - If today has no entry, the app creates a blank entry.
+    - If today has entries, the app asks whether to continue the latest or create another.
+    - Main window is one plain text box.
+    - Bottom status bar shows entry date.
+    - Bottom status bar shows cursor row and column.
+    - Bottom status bar shows line, word, and character counts.
+    - Bottom status bar shows whether the current entry is saved.
+    - User can write plain text and the app autosaves locally.
+    - Multiple entries can exist for the same day.
+    - User can browse entries by clicking dates in a calendar.
+    - Dates with entries are visually marked in the calendar.
+    - User can view an entry in a separate read-only window.
+    - User can edit a selected entry in the main editor window.
+    - User can set editor font size, text color, and background color.
+    - User can show or hide a faint word wrap guide.
+    - User can set the word wrap column, defaulting to 88 characters.
+    - Interface stays quiet and focused on writing.
+
+ui_constraints:
+  main_window:
+    purpose: plain_text_editor
+    visible_elements:
+      - text_box
+      - bottom_status_bar
+    esc_options_window_actions:
+      - new_entry
+      - browse_entries
+    status_bar_fields:
+      - entry_date
+      - cursor_row_column
+      - line_count
+      - word_count
+      - character_count
+      - save_state
+    positive_constraint: >
+      The primary experience is typing into a single text box with a compact
+      status bar at the bottom.
+  options_window:
+    trigger: Esc
+    behavior:
+      - Esc opens the options window when closed.
+      - Esc closes the options window when open.
+      - Selecting an option closes the options window.
+    actions:
+      - new_entry
+      - browse_entries
+      - settings
+
+features:
+  editor_appearance_settings:
+    purpose: >
+      Let the user adjust the writing surface for readability while keeping the
+      main editor visually minimal.
+    controls:
+      - font_size
+      - text_color
+      - background_color
+      - wrap_guide_visible
+      - wrap_guide_column
+    persistence:
+      desktop: settings.json
+      browser_fallback: localStorage key piedejour.settings
+    behavior:
+      - Settings are opened from the Esc options window.
+      - Changes apply immediately to the editor.
+      - Settings persist locally across launches.
+
+  word_wrap_column_guide:
+    purpose: >
+      Set the editor's soft-wrap width and optionally show a faint vertical guide
+      at that same column while keeping the editor as a plain text box.
+    default:
+      visible: true
+      column: 88
+    controls:
+      - visible_toggle
+      - character_column_input
+    behavior:
+      - Textarea word wrap remains enabled.
+      - Editor width is constrained to the configured monospace character column.
+      - Guide position uses the same configured column and editor padding as the text wrap.
+      - Hiding the guide does not change the wrap column.
+      - Guide settings persist with editor appearance settings.
+
+  browse_entries_by_date:
+    purpose: >
+      Let the user browse journal history visually by clicking dates, then choose
+      whether to read or edit entries from that date.
+    entry_point: Browse by Date button
+    calendar:
+      - Show one month at a time.
+      - Let the user move to previous and next months.
+      - Mark dates that have one or more entries.
+      - Clicking a date shows entries for that date.
+    selected_date_entries:
+      - Show entries for the clicked date.
+      - View opens the entry read-only in a separate window.
+      - Edit opens the entry in the main editor window.
+    scope_boundary:
+      - Date browsing only.
+      - No search.
+      - No tags.
+      - No filters.
+      - No analytics.
+
+handoff_notes:
+  next_ai_should:
+    - Read docs/spec.yaml first.
+    - Read docs/tasks.yaml for current task state.
+    - Read docs/lessons-learned.yaml before making changes.
+    - Inspect existing files before editing.
+    - Preserve the minimal product direction.

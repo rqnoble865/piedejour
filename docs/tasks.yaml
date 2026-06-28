@@ -1,0 +1,205 @@
+tasks:
+  - id: define_collaboration_style
+    title: Define preferred working style
+    status: completed
+    completed_on: 2026-06-26
+    notes:
+      - Discuss before coding.
+      - Prefer positive constraints.
+      - Keep project documentation in YAML.
+
+  - id: define_product_direction
+    title: Define minimal product direction
+    status: completed
+    completed_on: 2026-06-26
+    notes:
+      - Local-first desktop journal.
+      - Multiple entries per day.
+      - Continue latest today entry or create another.
+      - Sync and backup are future features.
+
+  - id: scaffold_static_prototype
+    title: Scaffold initial static prototype
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - index.html
+      - styles.css
+      - app.js
+
+  - id: add_desktop_shell
+    title: Add minimal Electron desktop shell
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - package.json
+      - main.js
+      - preload.js
+
+  - id: add_project_docs
+    title: Add YAML project documentation
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - docs/lessons-learned.yaml
+
+  - id: install_dependencies
+    title: Install desktop app dependencies
+    status: completed
+    completed_on: 2026-06-26
+    notes:
+      - Node and npm were installed through Homebrew.
+      - Electron install script needed approval with npm approve-scripts electron.
+      - Electron binary download required network access.
+
+  - id: run_desktop_app
+    title: Run and verify desktop app
+    status: completed
+    completed_on: 2026-06-26
+    notes:
+      - npm start launched Electron successfully.
+      - Verification process was stopped with SIGINT after startup succeeded.
+      - Full UI workflow verification is still useful before packaging.
+
+  - id: browse_entries_by_date
+    title: Add clickable calendar entry browser
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+      - main.js
+      - preload.js
+      - entry-view.html
+      - entry-view.js
+    notes:
+      - Show one month at a time.
+      - Mark dates with entries.
+      - Clicking a date lists entries for that date.
+      - View opens a read-only window.
+      - Edit loads the entry in the main editor.
+
+  - id: simplify_main_editor_ui
+    title: Replace dashboard UI with plain text box and bottom status bar
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+    notes:
+      - Main window should show one text box.
+      - Bottom status bar should show entry date, cursor row/column, line count, word count, character count, and save state.
+      - Keep same-day prompt and date browsing as supporting flows, not persistent main-screen chrome.
+
+  - id: esc_options_window
+    title: Use ESC to toggle an options window
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+      - main.js
+      - preload.js
+    notes:
+      - Esc should open the options window when it is closed.
+      - Esc should close the options window when it is open.
+      - Options should include New Entry and Browse Entries.
+      - Main writing surface should remain plain text box plus status bar.
+
+  - id: compact_browse_calendar
+    title: Make browse calendar smaller so entries are visible
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - styles.css
+      - docs/tasks.yaml
+    notes:
+      - Narrowed the browse dialog.
+      - Reduced calendar navigation, weekday, and date cell sizing.
+      - Made selected date entries scroll independently below the compact calendar.
+
+  - id: editor_appearance_settings
+    title: Add settings for editor font size and colors
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+      - main.js
+      - preload.js
+    notes:
+      - Add Settings to the Esc options window.
+      - Settings should include font size, text color, and background color.
+      - Changes should apply immediately and persist locally.
+
+  - id: word_wrap_column_guide
+    title: Add optional word wrap column guide
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - index.html
+      - styles.css
+      - app.js
+    notes:
+      - Textarea already wraps text by default.
+      - Add a faint vertical guide at the configured character column.
+      - Default guide column should be 88 characters.
+      - Settings should allow changing the guide column and toggling visibility.
+
+  - id: align_wrap_guide_with_text_wrap
+    title: Make configured wrap column control actual text wrapping
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - docs/spec.yaml
+      - docs/tasks.yaml
+      - docs/lessons-learned.yaml
+      - styles.css
+      - app.js
+    notes:
+      - Previous guide setting only moved the visual guide.
+      - Textarea still wrapped at full window width.
+      - Editor width now uses the same configured character column as the guide.
+      - Hiding the guide leaves the configured wrap width in effect.
+
+  - id: add_readme_build_install_docs
+    title: Add README with source, build, run, package, and install instructions
+    status: completed
+    completed_on: 2026-06-26
+    files:
+      - README.md
+      - docs/tasks.yaml
+    notes:
+      - Documented how to get the source code.
+      - Documented npm dependency installation and Electron script approval.
+      - Documented how to run the app with npm start.
+      - Documented that installable packaging is not configured yet.
+      - Added recommended electron-builder path for future packaging.
+
+  - id: add_gitignore
+    title: Add gitignore for Electron project
+    status: completed
+    completed_on: 2026-06-28
+    files:
+      - .gitignore
+      - docs/tasks.yaml
+    notes:
+      - Ignore node_modules and packaging output.
+      - Ignore logs, local runtime data, caches, OS files, and editor metadata.
+      - Keep source, docs, package.json, and package-lock.json trackable.

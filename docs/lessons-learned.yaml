@@ -1,0 +1,123 @@
+lessons:
+  - id: discuss_before_coding
+    date: 2026-06-26
+    category: collaboration
+    mistake: Started implementing from the first product description without first discussing the idea.
+    impact: >
+      The implementation skipped product-shaping questions that mattered, including
+      platform, storage expectations, multiple entries per day, and minimal scope.
+    prevention:
+      - Start product requests by asking clarifying questions.
+      - Challenge assumptions before creating files.
+      - Wait for explicit implementation approval before coding new product features.
+      - Record the agreed direction in docs/spec.yaml before making substantial changes.
+
+  - id: use_positive_constraints
+    date: 2026-06-26
+    category: communication
+    mistake: Framed some direction as avoided features instead of defining the intended path.
+    impact: >
+      Negative constraints can leave too much ambiguity about what should be built.
+    prevention:
+      - State what the app is and what belongs in the current version.
+      - Define success criteria in positive terms.
+      - Use deferred feature lists only as supporting context.
+
+  - id: keep_handoff_docs_current
+    date: 2026-06-26
+    category: process
+    mistake: Project state initially existed only in conversation and source files.
+    impact: >
+      A future AI or developer would need to infer product direction from scattered
+      context.
+    prevention:
+      - Update docs/spec.yaml when product or technical direction changes.
+      - Update docs/tasks.yaml when work starts, completes, or becomes blocked.
+      - Update docs/lessons-learned.yaml after mistakes or process corrections.
+
+  - id: electron_install_requires_script_approval
+    date: 2026-06-26
+    category: setup
+    mistake: Electron was installed while its postinstall script was blocked by npm script approval.
+    impact: >
+      node_modules/electron existed, but the Electron desktop binary was incomplete,
+      so npm start failed with "Electron failed to install correctly".
+    prevention:
+      - Run npm approve-scripts electron after npm warns that Electron has a pending install script.
+      - Rebuild with npm rebuild electron --foreground-scripts.
+      - If the Electron cache extracts incompletely, move the cached zip aside and download a fresh binary.
+      - Verify with node -e "console.log(require('electron'))" before running npm start.
+
+  - id: prefer_plain_editor_surface
+    date: 2026-06-26
+    category: product_direction
+    mistake: The early UI looked like a journaling dashboard instead of a plain writing tool.
+    impact: >
+      Header, toolbar, title input, and visible action buttons made the app feel
+      heavier than the user's intended text-box-first experience.
+    prevention:
+      - Keep the main window to one text box and a compact status bar.
+      - Put secondary actions behind Esc instead of persistent visible chrome.
+      - Treat visual preference corrections as product direction, not cosmetic polish.
+
+  - id: document_preference_refinements
+    date: 2026-06-26
+    category: process
+    mistake: Small UI preference changes were tracked in tasks and spec, but not summarized in the notes file.
+    impact: >
+      A future handoff could know what changed without understanding why the
+      direction shifted toward a smaller, plainer interface.
+    prevention:
+      - Add a notes or lessons entry when a user preference materially changes the app direction.
+      - Use docs/tasks.yaml for completed work state.
+      - Use docs/spec.yaml for current desired behavior.
+      - Use docs/lessons-learned.yaml for durable process and product-direction takeaways.
+
+  - id: keep_secondary_ui_compact
+    date: 2026-06-26
+    category: product_direction
+    mistake: The first browse calendar took too much room, making the entry list harder to see.
+    impact: >
+      The browse flow prioritized date selection visually, while the useful next
+      action was choosing an entry from the selected date.
+    prevention:
+      - Size secondary controls so the user's next action remains visible.
+      - Keep calendar browsing compact and let the entry list have usable space.
+      - Prefer scrollable secondary lists over expanding modal height.
+
+  - id: settings_belong_behind_esc
+    date: 2026-06-26
+    category: product_direction
+    mistake: Appearance settings could have added persistent controls to the writing surface.
+    impact: >
+      Persistent settings controls would conflict with the plain text editor
+      direction.
+    prevention:
+      - Keep appearance settings behind the Esc options window.
+      - Apply settings immediately so the user can tune readability without extra workflow.
+      - Persist editor preferences separately from journal entries.
+
+  - id: wrap_guide_is_a_setting
+    date: 2026-06-26
+    category: product_direction
+    mistake: A wrap guide could become permanent editor chrome if treated as part of the main surface.
+    impact: >
+      Always-visible formatting aids can make the plain text box feel less plain,
+      especially for users who do not want column guidance.
+    prevention:
+      - Keep the wrap guide faint and optional.
+      - Default the guide to 88 characters.
+      - Store guide visibility and column with editor appearance settings.
+      - Keep textarea word wrap enabled regardless of guide visibility.
+
+  - id: wrap_guide_must_match_actual_wrap
+    date: 2026-06-26
+    category: implementation
+    mistake: The wrap guide setting moved only the visible guide line while the textarea still wrapped at the window edge.
+    impact: >
+      Changing the configured wrap column made the guide move, but the text did
+      not wrap at the same location, so the setting was misleading.
+    prevention:
+      - Drive the editor width and guide position from the same wrap column setting.
+      - Treat guide visibility as independent from wrap width.
+      - Verify visual aids correspond to actual editor behavior, not just decoration.
